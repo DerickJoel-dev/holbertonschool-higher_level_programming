@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
 """
-Script that print the State object with the name passed
-as argument from the database.
+Script that adds the State object "Louisiana" to the database.
 """
 
 import sys
@@ -14,7 +13,6 @@ if __name__ == '__main__':
     username = sys.argv[1]
     password = sys.argv[2]
     database = sys.argv[3]
-    state_name = sys.argv[4]
 
     engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
                            .format(username, password, 'localhost', database))
@@ -22,11 +20,10 @@ if __name__ == '__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    state = session.query(State).where(State.name == state_name).first()
+    state = State(name='Louisiana')
+    session.add(state)
+    session.commit()
 
-    if state is None:
-        print("Not found")
-    else:
-        print(state.id)
+    print(state.id)
 
     session.close()
